@@ -1,42 +1,62 @@
 import cirq
 
-q = cirq.LineQubit(1)
 
-# I = cirq.unitary(cirq.X)
-#
-# o = cirq.H(cirq.LineQubit(1))
-#
-# circuit = cirq.Circuit()
-# qubits = cirq.LineQubit.range(3)
-# circuit.append(cirq.H(qubits[0]))
-# circuit.append(cirq.H(qubits[1]))
-# circuit.append(cirq.H(qubits[2]))
-# print(circuit)
-#
-# print(cirq.Circuit(cirq.SWAP(q, q + 1) for q in cirq.LineQubit.range(3)))
+# def less_than_circuit(numbers, input_value):
 
-import cirq
 
-def less_than_circuit(numbers, input_value):
-    num_qubits = len(numbers)
-    input_qubits = [cirq.GridQubit(i, 0) for i in range(num_qubits)]
-    output_qubits = [cirq.GridQubit(i, 1) for i in range(num_qubits)]
+    # return list of numbers less than K
 
-    circuit = cirq.Circuit()
+    # Return circuit diagram
 
-    # Apply X gate to input qubits based on input value
-    for i, qubit in enumerate(input_qubits):
-        if (input_value >> i) & 1:
-            circuit.append(cirq.X(qubit))
+# def proof_of_better_than_classical():
+#     count = 0
+#     for num in lst:
+#         if num < k:
+#             count += 1
+#     return count
 
-    # Apply comparison gates
-    for input_qubit, output_qubit in zip(input_qubits, output_qubits):
-        circuit.append(cirq.CX(input_qubit, output_qubit))
 
-    return circuit
+import time
+import matplotlib.pyplot as plt
+import numpy as np
 
-# Example usage
-numbers = [3, 5, 2, 7]  # List of numbers
-input_value = 4         # Input value to compare against
+import time
+import matplotlib.pyplot as plt
+import numpy as np
 
-circuit = less_than_circuit(numbers, input_value)
+def count_integers_less_than_k(lst, k):
+    count = 0
+    for num in lst:
+        if num < k:
+            count += 1
+    return count
+
+def measure_execution_time(n_values):
+    execution_times = []
+    for n in n_values:
+        numbers = list(range(n))
+        start_time = time.time()
+        count_integers_less_than_k(numbers, n//2)  # assuming k is approximately n/2
+        end_time = time.time()
+        execution_time = end_time - start_time
+        execution_times.append(execution_time)
+    return execution_times
+
+# Generate different sizes of input lists
+n_values = [10**i for i in range(0, 6)]
+
+# Measure execution time for each input size
+execution_times = measure_execution_time(n_values)
+print(execution_times)
+
+# Plot the relationship between input size and execution time
+plt.plot(n_values, execution_times, marker='o')
+plt.title('Execution Time vs Input Size (Log Scale)')
+plt.xlabel('Input Size (n)')
+plt.ylabel('Execution Time (seconds)')
+plt.xscale('log')  # Use logarithmic scale for x-axis
+plt.yscale('log')  # Use logarithmic scale for y-axis
+plt.grid(True)
+plt.show()
+
+
